@@ -29,6 +29,7 @@ class Cycle extends Model
         }
 
         return (object)[
+            'id' => $cycle->id,
             'start' => $cycle->start,
             'end' => $cycle->end
         ];

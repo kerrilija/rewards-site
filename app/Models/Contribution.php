@@ -9,6 +9,8 @@ class Contribution extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['contributor_id', 'cycle_id', 'platform', 'url', 'type', 'level', 'percentage', 'reward', 'comment', 'confirmed'];
+
     public function contributor()
     {
         return $this->belongsTo(Contributor::class);
