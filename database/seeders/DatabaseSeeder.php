@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             ContributorsSeeder::class,
             ContributionsSeeder::class,
             LegacyContributionsSeeder::class,
+            RewardsSeeder::class,
         ]);
     }
 }

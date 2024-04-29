@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("type");
             $table->unsignedInteger("level");
-            $table->decimal("reward", 10,2);
+            $table->decimal("reward", 10,3);
             $table->string("description")->nullable();
             $table->text('general_description')->nullable();
             $table->timestamps();
