@@ -43,6 +43,8 @@ class ContributionController extends Controller
         return response()->json(['error' => 'Contributor not found'], Response::HTTP_NOT_FOUND);
     }
 
+    $rewardValue = $this->getRewardValue($requestData['type'], $requestData['level']);
+
     $args = [
         'contributor_id' => $contributor->id,
         'cycle_id' => $latestCycle->id,
@@ -50,6 +52,7 @@ class ContributionController extends Controller
         'url' => $requestData['url'],
         'type' => $requestData['type'],
         'level' => $requestData['level'],
+        'reward' => $rewardValue,
         'confirmed' => false,
         'percentage' => 1
     ];
@@ -62,5 +65,12 @@ class ContributionController extends Controller
         return response()->json(['error' => 'Failed to create the contribution'], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }
+
+private function getRewardValue($type, $level)
+    {
+        $reward = \App\Models\Reward::where('type', $type)->where('level', $level)->first();
+        return $reward ? $reward->reward : null;
+    }
+
 
 }

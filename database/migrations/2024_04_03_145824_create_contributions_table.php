@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('type')->nullable();
             $table->integer('level')->nullable();
             $table->decimal('percentage', 10, 2)->nullable();
-            $table->decimal('reward')->nullable();
+            $table->decimal('reward', 10, 3)->nullable();
             $table->string('comment')->nullable();
             $table->boolean('confirmed')->default(true);
             $table->timestamps();
