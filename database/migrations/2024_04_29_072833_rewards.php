@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedInteger("level");
             $table->decimal("reward", 10,2);
             $table->string("description")->nullable();
+            $table->text('general_description')->nullable();
             $table->timestamps();
     });
     }
