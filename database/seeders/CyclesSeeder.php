@@ -10,10 +10,8 @@ class CyclesSeeder extends Seeder
 {
     public function run()
     {
-        // Process the legacy contributions file
         $this->processFile(base_path("database/data/legacy_contributions.csv"));
         
-        // Process the current contributions file
         $this->processFile(base_path("database/data/contributions.csv"));
     }
 

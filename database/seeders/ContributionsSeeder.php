@@ -21,9 +21,9 @@ class ContributionsSeeder extends Seeder
             return;
         }
 
-        $rowNumber = 0; // Initialize row number counter
+        $rowNumber = 0;
         while (($row = fgetcsv($csvFile)) !== FALSE) {
-            $rowNumber++; // Increment row number at the beginning of the loop
+            $rowNumber++;
 
             $contributorName = $row[0];
             $startDate = $row[1];
