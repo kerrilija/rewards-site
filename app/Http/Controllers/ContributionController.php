@@ -28,43 +28,43 @@ class ContributionController extends Controller
     }
 
     public function addContribution(Request $request)
-{
-    $latestCycle = Cycle::getCycleDates();
+    {
+        $latestCycle = Cycle::getCycleDates();
 
-    if (isset($latestCycle->error)) {
-        return response()->json(['error' => $latestCycle->error], Response::HTTP_BAD_REQUEST);
+        if (isset($latestCycle->error)) {
+            return response()->json(['error' => $latestCycle->error], Response::HTTP_BAD_REQUEST);
+        }
+
+        $requestData = $request->only(['name', 'platform', 'url', 'type', 'level']);
+
+        $contributor = Contributor::where('name', $requestData['name'])->first();
+
+        if (!$contributor) {
+            return response()->json(['error' => 'Contributor not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $rewardValue = $this->getRewardValue($requestData['type'], $requestData['level']);
+
+        $args = [
+            'contributor_id' => $contributor->id,
+            'cycle_id' => $latestCycle->id,
+            'platform' => $requestData['platform'],
+            'url' => $requestData['url'],
+            'type' => $requestData['type'],
+            'level' => $requestData['level'],
+            'reward' => $rewardValue,
+            'confirmed' => false,
+            'percentage' => 1
+        ];
+
+        $contribution = Contribution::create($args);
+
+        if ($contribution) {
+            return response()->json($contribution, Response::HTTP_CREATED);
+        } else {
+            return response()->json(['error' => 'Failed to create the contribution'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
-
-    $requestData = $request->only(['name', 'platform', 'url', 'type', 'level']);
-
-    $contributor = Contributor::where('name', $requestData['name'])->first();
-
-    if (!$contributor) {
-        return response()->json(['error' => 'Contributor not found'], Response::HTTP_NOT_FOUND);
-    }
-
-    $rewardValue = $this->getRewardValue($requestData['type'], $requestData['level']);
-
-    $args = [
-        'contributor_id' => $contributor->id,
-        'cycle_id' => $latestCycle->id,
-        'platform' => $requestData['platform'],
-        'url' => $requestData['url'],
-        'type' => $requestData['type'],
-        'level' => $requestData['level'],
-        'reward' => $rewardValue,
-        'confirmed' => false,
-        'percentage' => 1
-    ];
-
-    $contribution = Contribution::create($args);
-
-    if ($contribution) {
-        return response()->json($contribution, Response::HTTP_CREATED);
-    } else {
-        return response()->json(['error' => 'Failed to create the contribution'], Response::HTTP_INTERNAL_SERVER_ERROR);
-    }
-}
 
 private function getRewardValue($type, $level)
     {
@@ -72,5 +72,28 @@ private function getRewardValue($type, $level)
         return $reward ? $reward->reward : null;
     }
 
-
+    public function getLastContributions()
+    {
+        $lastContributions = Contribution::with(['contributor', 'cycle'])
+                                         ->orderBy('id', 'desc')
+                                         ->limit(5)
+                                         ->get()
+                                         ->map(function ($contribution) {
+                                             return [
+                                                 'id' => $contribution->id,
+                                                 'contributor_name' => $contribution->contributor->name,
+                                                 'cycle_id' => $contribution->cycle->id,
+                                                 'platform' => $contribution->platform,
+                                                 'url' => $contribution->url,
+                                                 'type' => $contribution->type,
+                                                 'level' => $contribution->level,
+                                                 'percentage' => $contribution->percentage,
+                                                 'reward' => $contribution->reward,
+                                                 'confirmed' => $contribution->confirmed
+                                             ];
+                                         });
+    
+        return response()->json($lastContributions);
+    }
+    
 }
