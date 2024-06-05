@@ -49,10 +49,10 @@ class Contribution extends Model
             $query->where('type', $type);
         });
         
-        // Filter by contributor name
+        // Filter by contributor name (case-insensitive)
         $query->when($filters['name'] ?? null, function ($query, $name) {
             $query->whereHas('contributor', function ($query) use ($name) {
-                $query->where('name', 'like', '%' . $name . '%');
+                $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($name) . '%']);
             });
         });
 
