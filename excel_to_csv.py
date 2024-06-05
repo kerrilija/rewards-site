@@ -25,12 +25,14 @@ def convert_and_clean_excel(input_file, output_file, legacy_contributions):
     df = df[~df[0].str.startswith("NULL")]
 
     df1 = df.iloc[:855] # start part
-    df2 = df.iloc[940:] # Part to cut and insert
-    df3 = df.iloc[855:940] # final part
+    df2 = df.iloc[966:] # Part to cut and insert
+    df3 = df.iloc[855:966] # final part
 
     df = pd.concat([df1, df2, df3])
     df[0] = df[0].str.strip()  # Remove leading and trailing spaces from column 0
 
+    # full csv export for debugging
+    df.to_csv('fullcsv.csv', index=False, header=None, na_rep='NULL')
 
     # FINAL EXPORT
 
