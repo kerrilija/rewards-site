@@ -9,6 +9,8 @@ class Cycle extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['start', 'end']; // Define fillable properties
+
     public function contributions()
     {
         return $this->hasMany(Contribution::class);

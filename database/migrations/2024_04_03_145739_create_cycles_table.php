@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('start')->nullable();
             $table->date('end')->nullable();
+            $table->timestamps();
         });
     }
 
