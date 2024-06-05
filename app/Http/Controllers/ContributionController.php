@@ -30,21 +30,20 @@ class ContributionController extends Controller
     public function addContribution(Request $request)
     {
         $latestCycle = Cycle::getCycleDates();
-
+    
         if (isset($latestCycle->error)) {
             return response()->json(['error' => $latestCycle->error], Response::HTTP_BAD_REQUEST);
         }
-
+    
         $requestData = $request->only(['name', 'platform', 'url', 'type', 'level']);
-
-        $contributor = Contributor::where('name', $requestData['name'])->first();
-
-        if (!$contributor) {
-            return response()->json(['error' => 'Contributor not found'], Response::HTTP_NOT_FOUND);
-        }
-
+    
+        $contributor = Contributor::firstOrCreate(
+            ['name' => $requestData['name']],
+            ['name' => $requestData['name']]
+        );
+    
         $rewardValue = $this->getRewardValue($requestData['type'], $requestData['level']);
-
+    
         $args = [
             'contributor_id' => $contributor->id,
             'cycle_id' => $latestCycle->id,
@@ -56,15 +55,16 @@ class ContributionController extends Controller
             'confirmed' => false,
             'percentage' => 1
         ];
-
+    
         $contribution = Contribution::create($args);
-
+    
         if ($contribution) {
             return response()->json($contribution, Response::HTTP_CREATED);
         } else {
             return response()->json(['error' => 'Failed to create the contribution'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+    
 
 private function getRewardValue($type, $level)
     {

@@ -9,6 +9,7 @@ class Contributor extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name'];
     public function contribution()
     {
         return $this->hasMany(Contribution::class);
