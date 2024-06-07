@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ContributionWebController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [ContributionWebController::class, 'index']);

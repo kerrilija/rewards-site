@@ -1,0 +1,19 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f0f0f0;
+}
+header {
+    background-color: #8fbc8f;
+    color: #333;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+.content {
+    padding: 20px;
+    text-align: center;
+}
