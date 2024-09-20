@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASA Stats Rewards</title>
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    .font-oswald {
+      font-family: 'Oswald', sans-serif;
+    }
+    .font-nunito {
+      font-family: 'Nunito', sans-serif;
+    }
+    .separator {
+      border-left: 1px solid #D1D5DB;
+      height: 80px;
+    }
+    .nav-link:hover {
+      color: #00C896;
+    }
+    .nav-link.active {
+      color: #00C896;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="max-w-screen-xl mx-auto p-8">
+    <header class="flex items-center space-x-4 mb-8">
+      <img class="w-20 h-20" src="./images/asastats_logo.png" alt="Logo"> <!-- Fixed relative path -->
+      <h1 class="text-4xl text-stone-600 font-oswald pr-10">Rewards</h1>
+      <div class="separator mt-1 pr-10"></div>
+      <a href="#" class="text-gray-700 text-base font-nunito nav-link active flex-1 ml-4 mt-3">Home</a>
+      <nav class="flex items-center space-x-10 font-nunito mt-3">
+        <a href="#" class="text-gray-700 text-base nav-link">Contributions</a>
+        <a href="#" class="text-gray-700 text-base nav-link">Rewards Guide</a>
+      </nav>
+    </header>
+
+    <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div hx-get="hot-tasks.html" hx-trigger="load" hx-swap="outerHTML" class="col-span-1">
+        <div>Loading Hot Tasks...</div>
+      </div>
+
+      <div hx-get="featured-cards.html" hx-trigger="load" hx-swap="outerHTML" class="col-span-2">
+        <div>Loading Featured Cards...</div>
+      </div>
+
+      <div hx-get="contributions-table.html" hx-trigger="load" hx-swap="outerHTML" class="col-span-3">
+        <div>Loading Contributions Table...</div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
