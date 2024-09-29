@@ -1,0 +1,52 @@
+services:
+  laravel:
+    build:
+      context: ./rewards-site  # Path to your Laravel project where the Dockerfile is located
+    container_name: rewards-laravel
+    working_dir: /var/www/html
+    volumes:
+      - ./rewards-site:/var/www/html  # Mount your Laravel project
+      - ./custom-php-config/www.conf:/usr/local/etc/php-fpm.d/www.conf  # Custom PHP-FPM config
+    networks:
+      - project_network
+      - global_network
+    environment:
+      DB_HOST: db
+      DB_DATABASE: rewards_db
+      DB_USERNAME: rwdadmin
+      DB_PASSWORD: 20Khru4ngb!n24
+    depends_on:
+      - db
+
+  # PostgreSQL database service (PostgreSQL 17)
+  db:
+    image: postgres:17
+    container_name: rewards-db
+    environment:
+      POSTGRES_DB: rewards_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./db_data:/var/lib/postgresql/data  # Persist database data
+    networks:
+      - project_network
+      - global_network
+
+  # Node.js bot service (Node.js 22.9.0)
+  bot:
+    image: node:22.9.0
+    container_name: rewards-bot
+    working_dir: /usr/src/app
+    volumes:
+      - ./rewards-bot:/usr/src/app  # Mount your Node.js bot code
+    networks:
+      - project_network
+    ports:
+      - "8001:8001"  # Expose Node.js bot port (Nginx will proxy to this)
+    command: "npm start"  # Customize based on your bot's startup command
+
+networks:
+  project_network:
+    external: true
+  global_network:
+    external: true
