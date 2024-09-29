@@ -24,6 +24,9 @@
     .nav-link.active {
       color: #00C896;
     }
+    .custom-shadow {
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    }
   </style>
 </head>
 
@@ -49,10 +52,61 @@
         <div>Loading Featured Cards...</div>
       </div>
 
-      <div hx-get="contributions-table.html" hx-trigger="load" hx-swap="outerHTML" class="col-span-3">
-        <div>Loading Contributions Table...</div>
+      <!-- Table for Contributions -->
+      <div class="col-span-3">
+        <table class="min-w-full text-stone-600 bg-white rounded-lg overflow-x-auto border-separate border-spacing-0 custom-shadow">
+          <thead class="bg-stone-100 font-nunito">
+            <tr>
+              <th class="py-2 px-4 border-b text-left rounded-tl-lg">Contributor</th>
+              <th class="py-2 px-4 border-b text-left">Type</th>
+              <th class="py-2 px-4 border-b text-left">Level</th>
+              <th class="py-2 px-4 border-b text-left">Platform</th>
+              <th class="py-2 px-4 border-b text-left">Reward</th>
+              <th class="py-2 px-4 border-b text-left rounded-tr-lg">Percentage</th>
+            </tr>
+          </thead>
+          <tbody id="contributions-tbody">
+            <!-- This is where the contributions data will be loaded -->
+            <tr>
+              <td colspan="6" class="py-2 px-4 text-center">Loading contributions...</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </main>
   </div>
+
+  <!-- HTMX Trigger to Fetch JSON -->
+  <script>
+    // Fetch JSON and dynamically load the table rows
+    document.addEventListener("htmx:load", function() {
+      fetch('http://144.91.85.65/api/contributions/last')
+        .then(response => response.json())
+        .then(data => {
+          let tableBody = document.getElementById('contributions-tbody');
+          let tableRows = '';
+
+          // Iterate over the data and build the table rows
+          data.forEach(item => {
+            tableRows += `
+              <tr>
+                <td class="py-2 px-4 border-b font-nunito">${item.contributor_name}</td>
+                <td class="py-2 px-4 border-b font-nunito">${item.type}</td>
+                <td class="py-2 px-4 border-b font-nunito">${item.level}</td>
+                <td class="py-2 px-4 border-b font-nunito"><a href="${item.url}" target="_blank">${item.platform}</a></td>
+                <td class="py-2 px-4 border-b font-nunito">${item.reward}</td>
+                <td class="py-2 px-4 border-b font-nunito">${item.percentage}</td>
+              </tr>`;
+          });
+
+          // Replace the tbody content with the new table rows
+          tableBody.innerHTML = tableRows;
+        })
+        .catch(error => {
+          console.error('Error loading contributions:', error);
+          document.getElementById('contributions-tbody').innerHTML = `<tr><td colspan="6" class="py-2 px-4 text-center">Error loading contributions</td></tr>`;
+        });
+    });
+  </script>
 </body>
 </html>
