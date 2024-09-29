@@ -1,5 +1,5 @@
 <?php
 
-use App\Http\Controllers\ContributionWebController;
+use App\Http\Controllers\WebController;
 
-Route::get('/', [ContributionWebController::class, 'index']);
+Route::get('/', [WebController::class, 'index']);

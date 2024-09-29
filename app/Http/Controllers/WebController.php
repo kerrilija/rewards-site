@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Contribution;
+use Illuminate\Http\Request;
 
 class WebController extends Controller
 {
-    public function showContributions()
+    public function index()
     {
-        $contributions = Contribution::with('contributor')->get();
-        return view('contributions', ['contributions' => $contributions]);
+        return response()->file(public_path('index.html'));
     }
 }
-
