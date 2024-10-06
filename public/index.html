@@ -52,8 +52,6 @@
         <div>Loading Featured Cards...</div>
       </div>
 
-      <img src="https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg" alt="">
-
       <!-- Table for Contributions -->
       <div class="col-span-3">
         <table class="min-w-full text-stone-600 bg-white rounded-lg overflow-x-auto border-separate border-spacing-0 custom-shadow">
@@ -82,7 +80,7 @@
   <script>
     // Fetch JSON and dynamically load the table rows
     document.addEventListener("htmx:load", function() {
-      fetch('http://144.91.85.65/api/contributions/last')
+      fetch('https://rewards.ravnalo.xyz/api/contributions/last')
         .then(response => response.json())
         .then(data => {
           let tableBody = document.getElementById('contributions-tbody');
